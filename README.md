@@ -3,7 +3,7 @@
 
 ## Introduction
 
-[Webpage](https://https://egoschema.github.io/) • [Paper](https://https://egoschema.github.io/) 
+[Webpage](https://egoschema.github.io/) • [Paper](https://egoschema.github.io/) 
 
 ![Teaser](paper/teaser_final.jpg)
 EgoSchema is a pioneering dataset aimed to evaluate the long video understanding capabilities of the contemporary vision and language systems. Derived from Ego4D, EgoSchema encompasses over 5000 human-curated multiple-choice question-answer pairs, spread across more than 250 hours of genuine video data. This dataset captures a vast spectrum of natural human activity and behavior.
