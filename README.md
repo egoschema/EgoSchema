@@ -2,6 +2,10 @@
 # EgoSchema Dataset
 
 ## Introduction
+
+[Webpage](https://https://egoschema.github.io/) • [Paper](https://https://egoschema.github.io/) 
+
+![Teaser](paper/teaser_final.pdf)
 EgoSchema is a pioneering dataset aimed to evaluate the long video understanding capabilities of the contemporary vision and language systems. Derived from Ego4D, EgoSchema encompasses over 5000 human-curated multiple-choice question-answer pairs, spread across more than 250 hours of genuine video data. This dataset captures a vast spectrum of natural human activity and behavior.
 
 For each question,  EgoSchema  requires the correct answer to be selected between  five given options based on a three-minute-long video clips. While some prior works have proposed video datasets with long clip lengths, we posit that merely the length of the video clip does not truly capture the temporal difficulty of the video task that is being considered. To remedy this, we introduce temporal certificate sets, a general notion for capturing the intrinsic temporal understanding length associated with a broad range of video understanding tasks & datasets. EgoSchema, alongside its profound temporal structures and varying complexity, is projected to be a pivotal evaluation tool for the subsequent advancements in the realm of video understanding.
@@ -19,6 +23,10 @@ For each question,  EgoSchema  requires the correct answer to be selected betwee
 To download the dataset, simply run the following command:
 
 ```bash
+conda create -n egoschema_download python=3.8 
+conda activate egoschema_download
+conda install tqdm simplejson requests
+mkdir videos
 python download.py
 ```
 
