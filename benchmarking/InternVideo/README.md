@@ -1,16 +1,85 @@
-# Benchmarking InternVideo
 
-## Files you will need
-- questions.csv - a csv file that will be provided on our project Github page. Here we provided a sample questions.csv with redacted unnessasry columns
-- folder with clips. file name of the clips should be the same as the relevant column name in questions.csv
+# Benchmarking `InternVideo` with EgoSchema Dataset
 
-### Step 1:  Clone FrozenBilm at https://github.com/OpenGVLab/InternVideo
-Please follow all the step for their onboarding listed on their website.
-### Step 2: Put the code files and folders in Downstream/multi-modalities-downstream
-### Step 3: Use disguise.ipynb in order to put question in the same format as msrvtt.
-You will need question.csv file that consist of question and corresposnding video file names. Please put location of clips in CLIP_LOCATION. An example of question.csv is provided.
-### Step 3: Run run_internvideo.py file
+This README provides a comprehensive guide to benchmarking the `InternVideo` system using the EgoSchema dataset. Follow each step methodically to ensure seamless setup and execution.
+
+## Prerequisites
+
+### 1. EgoSchema Dataset
+
+Ensure you have the EgoSchema dataset downloaded and readily available.
+
+### 2. Configuration Adjustments
+
+Navigate to the `disguise.ipynb` file:
+- Update `EGOSCHEMA_FOLDER` with the path pointing to the EgoSchema dataset.
+
+## Installation and Configuration
+
+### Step 1: Clone `InternVideo` Repository
+
+Clone the `InternVideo` repository from the official GitHub repository:
+
+```bash
+git clone https://github.com/OpenGVLab/InternVideo.git
 ```
+
+Subsequently:
+- Closely follow the onboarding steps detailed on their official documentation.
+- Ensure you install both `InternVideo's MSRVTT` and `Vit-L-14 finetuned weights`.
+
+### Step 2: Positioning Code Files
+
+Place the provided code files and directories into `Downstream/multi-modalities-downstream`.
+
+### Step 3: Question Formatting
+
+Execute the `disguise.ipynb` Jupyter notebook. This script will transform the questions into a format compatible with `msrvtt`.
+
+### Step 4: Modify `objectives.py` File
+
+Navigate to `Cotrain/modules/objectives.py` and find the section around line 571. Replace the existing code block:
+
+```python
+phase = "train" if pl_module.training else "val"
+acc = getattr(pl_module, f"{phase}_multiple_choice_accuracy")(
+    score, vtm_labels
+)
+# print(acc)
+ret = {
+    "multiple_choice_loss": loss,
+}
+
+phase = "train" if pl_module.training else "val"
+loss = getattr(pl_module, f"{phase}_multiple_choice_loss")(ret["multiple_choice_loss"])
+
+pl_module.log(f"multiple_choice/{phase}/loss", loss)
+pl_module.log(f"multiple_choice/{phase}/accuracy", acc)
+return ret
+```
+
+With the modified version:
+
+```python
+ret = {
+       "score": score,
+       "ground_truth": vtm_labels
+   }
+return ret
+```
+
+This modification allows the extraction of choice scores from the model.
+
+### Step 5: Run Benchmark Script
+
+Execute the `run_internvideo.py` script:
+
+```bash
 python run_internvideo.py --f 15
 ```
-- --f how much frames to use 
+
+Parameters:
+- `--f`: Determines the number of frames to be used during processing. 
+
+---
+
