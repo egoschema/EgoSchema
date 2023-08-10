@@ -160,3 +160,4 @@ cython_debug/
 *.mp4
 questions_with_correct.json
 benchmarking/InternVideo/InternVideo
+benchmarking/mPLUG-Owl/mPLUG-Owl

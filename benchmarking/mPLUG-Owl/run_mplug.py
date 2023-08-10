@@ -15,7 +15,9 @@ import json
 import random
 import argparse
 
-FRAME_FOLDER = ""#put the frame folder here
+EGOSCHEMA_FOLDER = "../../../"
+CHECKPOINT_PATH = "instruction_tuned.pht"
+TOKENIZER_PATH = "tokenizer.pht"
 
 def parse_args():
     """
@@ -73,13 +75,15 @@ if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
     torch.cuda.empty_cache()
     with torch.no_grad():
-        model, tokenizer, img_processor = get_model(checkpoint_path='instruction_tuned.pht', tokenizer_path='tokenizer.pht')
+        model, tokenizer, img_processor = get_model(checkpoint_path=CHECKPOINT_PATH, 
+                                                    tokenizer_path=TOKENIZER_PATH)
     model = model.eval()
     f = open('q_prompt.txt','r')
     qa_prompt = f.read()
-    good_df = pd.read_csv("questions.csv")
-    folder = FRAME_FOLDER
+    questions_f = open(f"{EGOSCHEMA_FOLDER}/questions_with_correct.json")
+    questions = json.load(questions_f)
     frames = args.frames
+    folder = f"frames_{frames}"
 
     correct = 0
     total = 0
@@ -91,26 +95,22 @@ if __name__ == '__main__':
         results = {}
 
     YES_EMBED = [3869, 22483]
-    for index, row in tqdm(good_df.iterrows()):
-        vid_name = row[0]
-        qaw = row[1].split("\n")
-        q_id = int(qaw[0].strip()[9:10]) - 1
-        q = qaw[0][qaw[0].find(":") + 2:]
-        a = qaw[1][qaw[1].find(":") + 2:]
-        wa = qaw[2][qaw[2].find(":") + 2:]
-        wb = qaw[3][qaw[3].find(":") + 2:]
-        wc = qaw[4][qaw[4].find(":") + 2:]
-        wd = qaw[5][qaw[5].find(":") + 2:]
+    for q_dict in tqdm(questions):
+        q_uid = q_dict['q_uid']
+        q = q_dict['question']
+        options = [q_dict['option 0'], q_dict['option 1'], q_dict['option 2'], q_dict['option 3'], q_dict['option 4']]
+        correct_answer = q_dict['correct_answer']
+        correct_option = options.pop(correct_answer)
     
-        if f"{vid_name}_{q_id}" in results:
+        if q_uid in results:
             continue
     
-        aw_options = [a, wa, wb, wc, wd]
+        aw_options = [correct_option] + options
         confidence = []
             
         for option in aw_options:
             qa_string = f"Given question '{q}, is answer '{option}' correct?"
-            images_folder = f"{folder}/{vid_name}"
+            images_folder = f"{folder}/{q_uid}"
             images_paths = [f"{images_folder}/{im}" for im in os.listdir(images_folder) if "ipynb" not in im]
         
             image_string = ""
@@ -165,7 +165,7 @@ if __name__ == '__main__':
             best = the_best[0]
         else:
             best = random.choice(the_best)
-        results[f"{vid_name}_{q_id}"] = str(best)
+        results[q_uid] = str(best)
 
         with open(f"save_result_{frames}.json", 'w') as f:
             json.dump(results, f)
