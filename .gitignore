@@ -161,3 +161,5 @@ cython_debug/
 questions_with_correct.json
 benchmarking/InternVideo/InternVideo
 benchmarking/mPLUG-Owl/mPLUG-Owl
+benchmarking/FrozenBilm/FrozenBiLM
+benchmarking/Violet/pytorch_empirical-mvm

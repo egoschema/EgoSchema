@@ -1,6 +1,7 @@
 import os
 import pickle
 import pandas as pd
+import json
 import multiprocessing as mp
 import cv2
 import base64
@@ -13,7 +14,7 @@ def process_video(input_vals):
     and return them as a list of strings"""
     clip_id, n_frames, videos_dir = input_vals
 
-    clip_path = os.path.join(videos_dir, "{}.mp4"(clip_id))
+    clip_path = os.path.join(videos_dir, f"{clip_id}.mp4")
     cap = cv2.VideoCapture(clip_path)
     frames = []
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -33,10 +34,12 @@ def process_video(input_vals):
 
     return clip_id, width, height, frames
 
-def process_csv(input_file, n_frames, videos_dir):
-    df = pd.read_csv(input_file)
-    tsv_file_path = os.path.dirname(input_file) + "/img_egoSchema.tsv"
-    pickle_file_path = os.path.dirname(input_file) + "/img_egoSchema.id2lineidx.pkl"
+def process_csv(n_frames, videos_dir):
+    questions_f = open(f"../../../../questions_with_correct.json")
+    questions = json.load(questions_f)
+    
+    tsv_file_path = "./img_egoSchema.tsv"
+    pickle_file_path = "./img_egoSchema.id2lineidx.pkl"
 
     num_processes = mp.cpu_count()
     print("Using {} Processes".format(num_processes))
@@ -45,11 +48,11 @@ def process_csv(input_file, n_frames, videos_dir):
 
     # extract Clip IDs
     data_points = []
-    for _, row in df.iterrows():
-        clip_id = row['clip_id']
+    for row in questions:
+        clip_id = row['q_uid']
         data_points.append((clip_id, n_frames, videos_dir))
 
-    with tqdm(total=len(df)) as pbar:
+    with tqdm(total=len(questions)) as pbar:
         for i, processed_video in enumerate(pool.imap(process_video, [data_point for data_point in data_points])):
             rows.append(processed_video)
             pbar.update()
@@ -69,12 +72,11 @@ def process_csv(input_file, n_frames, videos_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Preprocess the clips by converting them to strings and storing in a TSV file')
-    parser.add_argument('--input_file', type=str, help='Path to input CSV with all examples')
     parser.add_argument('--videos_dir', type=str, help='Path to directory where videos are located')
     parser.add_argument('--n_frames', type=int, default=250, help='Number of frames to extract from video')
     parser.add_argument('--num_proc', type=int, default=8, help='Number of process to run')
     args = parser.parse_args()
 
     # Process input file and save output files
-    process_csv(args.input_file, args.n_frames, args.videos_dir)
+    process_csv(args.n_frames, args.videos_dir)
     

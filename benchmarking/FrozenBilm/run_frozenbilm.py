@@ -36,7 +36,7 @@ from tqdm import tqdm
 import pandas as pd
 device = torch.device("cuda")
 
-EGOSCHEMA_FOLDER = "../../EgoSchema"
+EGOSCHEMA_FOLDER = "../../../"
 WEIGHTS_PATH = "/home/raiymbek/frozenbilm_how2qa.pth"
 
 
@@ -64,7 +64,7 @@ def bilm(q_uid, question, answer, wrong_answers, result):
     key = "full_bilm_pred"
 
     if key in result:
-        return result[key] != 4, {}
+        return {}
 
     with torch.no_grad():
         try:
@@ -73,7 +73,7 @@ def bilm(q_uid, question, answer, wrong_answers, result):
             return {key:  -1} 
         
         if video.shape[0] != frame_count:
-            return False, {key:  -1} 
+            return {key:  -1} 
         video = video.unsqueeze(0).cuda()
         video_mask = get_mask(
             torch.tensor(frame_count, dtype=torch.long).unsqueeze(0), video.size(1)
@@ -133,14 +133,13 @@ def main():
     if os.path.isfile(f"{result_folder}/{result_file_name}.json"):
         current_results_f = open(f"{result_folder}/{result_file_name}.json") 
         current_results = json.load(current_results_f)
-    print(len(current_results))
-    q_uid_to_res = {res['q_uid']: res for res in current_results}
+    q_uid_to_res = {current_results[res]['q_uid']: current_results[res] for res in current_results.keys()}
         
     for q_dict in tqdm(qa_data):
         q_uid = q_dict['q_uid']
         q = q_dict['question']
         options = [q_dict['option 0'], q_dict['option 1'], q_dict['option 2'], q_dict['option 3'], q_dict['option 4']]
-        correct_answer = q_dict['corrent_answer']
+        correct_answer = q_dict['correct_answer']
         correct_option = options.pop(correct_answer)
         
         result = {}
@@ -154,7 +153,11 @@ def main():
         result["w"] = options
                
         output = bilm(q_uid, q, correct_option, options, result)
-        result.update(output)
+        try:
+            result.update(output)
+        except:
+            print(output)
+            continue
         current_results[q_uid] = result
         with open(f"{result_folder}/{result_file_name}.json", 'w') as f:
             json.dump(current_results, f)
