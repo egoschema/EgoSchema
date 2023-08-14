@@ -29,7 +29,7 @@ Place the provided code files into the root directory of the cloned `FrozenBiLM`
 
 ### Step 3: Generate Video Clip Features
 
-- Launch the `feature_gen.ipynb` Jupyter notebook. This script facilitates the generation of features for video clips in the EgoSchema dataset.
+- Launch the `feature_gen.ipynb` or run `python feature_gen.py --f <frames number>`. This script facilitates the generation of features for video clips in the EgoSchema dataset. Some videos might not get proccessed properly so you might need to run it several times.
   
 - You have the flexibility to adjust the `frame` parameter as per requirements.
   
