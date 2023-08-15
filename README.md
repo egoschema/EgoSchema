@@ -35,9 +35,17 @@ conda install tqdm simplejson requests
 mkdir videos
 python download.py
 ```
+or 
+```bash
+conda create -n egoschema_download python=3.8 
+conda activate egoschema_download
+conda install tqdm simplejson requests moviepy
+mkdir videos
+python download_multiproc.py --p <number of processes>
+```
 
-This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file.
+This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file.The second script will be faster although less stable.
 
 ## Benchmarking EgoSchema
 
-For those interested in benchmarking code using the EgoSchema dataset, we have prepared detailed instructions for the various models . Head over to the `benchmarking` folder to find the comprehensive guides and setup procedures for each model.
+For those interested in benchmarking code using the EgoSchema dataset, we have prepared detailed instructions for the various models . Head over to the `benchmarking` folder to find the comprehensive guides and setup procedures for each model. Note: all of the benchmarking code requires correct answer to the questions that we will release soon.
