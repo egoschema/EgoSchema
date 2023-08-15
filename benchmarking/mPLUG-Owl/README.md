@@ -31,11 +31,11 @@ Transfer the provided code files into the cloned `mPLUG-Owl` directory.
 
 ### Step 3: Frame Preparation using `framing.ipynb`
 
-1. Open `framing.ipynb`:
+1. Open `framing.ipynb` or `framing.py`:
     - Set `EGOSCHEMA_FOLDER` to the path of the EgoSchema dataset.
     - Define the number of frames you wish to extract by adjusting the `frames` variable.
     
-2. Running `framing.ipynb` will create a directory named `frame_{number of frames}`. Inside, you'll find subdirectories corresponding to each video. Each subdirectory houses a certain number of frames extracted from its associated video.
+2. Running `framing.ipynb` or `framing.py`will create a directory named `frame_{number of frames}`. Inside, you'll find subdirectories corresponding to each video. Each subdirectory houses a certain number of frames extracted from its associated video.
 
 ### Step 4: Execute the Benchmark Script
 

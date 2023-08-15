@@ -17,10 +17,10 @@ mkdir egoSchema
 ```
 Next:
 1. Download the clips and save them to a directory `<clips_dir>`
-2. Download the EgoSchema csv and save it to the folder your created above: `pytorch_empirical-mvm/egoSchema`
-3. Download provided pre-processing scripts and put them in `pytorch_empirical-mvm/egoSchema`
-4. Download the `args_egoSchema.json` and place it in `pytorch_empirical-mvm/_args`
-5. Set the frames keys `args_egoSchema.json` for teh amount of frames you want you use
+2. Download provided pre-processing scripts and put them in `pytorch_empirical-mvm/egoSchema`
+3. Download the `args_egoSchema.json` and place it in `pytorch_empirical-mvm/_args`
+4. Set the frames key in the file`args_egoSchema.json` for the amount of frames you want you use.
+5. Set the path_ckpt key in the file`args_egoSchema.json` for pretraining model you want to use.
 6. Install the necessary packages as listed on pytorch_empirical-mvm README.md
 
 **Step 2:** Preprocess EgoSchema data 

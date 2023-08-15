@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import numpy as np 
+import argparse
 
 EGOSCHEMA_FOLDER = "../../EgoSchema"
 WEIGHTS_PATH = "/home/raiymbek/frozenbilm_how2qa.pth"
