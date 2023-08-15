@@ -7,8 +7,8 @@
 [Webpage](https://egoschema.github.io/) • [Paper](https://egoschema.github.io/) :newspaper:
  
 <p align="center">
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=D8vWatVaaUM
-" target="_blank" align="center"><img src="http://img.youtube.com/vi/D8vWatVaaUM/0.jpg" 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=_VVoiSzb5E4
+" target="_blank" align="center"><img src="http://img.youtube.com/vi/_VVoiSzb5E4/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="80%" height="80%" border="10" /></a>
 </p>
 

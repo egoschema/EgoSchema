@@ -2,6 +2,13 @@
 
 This readme provides a step by step procedure for evaluating VIOLETv2 on EgoSchema
 
+## Prerequisites
+
+1. **Download the EgoSchema Dataset**: Before proceeding, make sure you have the EgoSchema dataset downloaded and ready.
+
+2. **Configuration Updates**: Open the code files:
+    - Set `EGOSCHEMA_FOLDER` to the path where the EgoSchema dataset resides.
+
 **Step 1:** Clone VIOLETv2 repo & setup environment
 ```shell
 git clone https://github.com/tsujuifu/pytorch_empirical-mvm
@@ -13,7 +20,8 @@ Next:
 2. Download the EgoSchema csv and save it to the folder your created above: `pytorch_empirical-mvm/egoSchema`
 3. Download provided pre-processing scripts and put them in `pytorch_empirical-mvm/egoSchema`
 4. Download the `args_egoSchema.json` and place it in `pytorch_empirical-mvm/_args`
-4. Install the necessary packages as listed on pytorch_empirical-mvm README.md
+5. Set the frames keys `args_egoSchema.json` for teh amount of frames you want you use
+6. Install the necessary packages as listed on pytorch_empirical-mvm README.md
 
 **Step 2:** Preprocess EgoSchema data 
 ```shell
