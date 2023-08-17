@@ -1,18 +1,15 @@
 
 
-# EgoSchema Dataset
+<font size="10">**EgoSchema Dataset** </font>
+<font size="5">A Diagnostic Benchmark for Very Long-form Video Language Understanding </font>
 
-## Introduction
-
-[Webpage](https://egoschema.github.io/) • [Paper](https://egoschema.github.io/) :newspaper:
+[Webpage](https://egoschema.github.io/) :globe_with_meridians: • [Paper](https://egoschema.github.io/) :newspaper: 
  
 <p align="center">
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=_VVoiSzb5E4
 " target="_blank" align="center"><img src="http://img.youtube.com/vi/_VVoiSzb5E4/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="80%" height="80%" border="10" /></a>
 </p>
-
-*Video Credits: [Annabel Ng](https://annabelng.com/)* :movie_camera:
 
 EgoSchema is a pioneering dataset aimed to evaluate the long video understanding capabilities of the contemporary vision and language systems. Derived from Ego4D, EgoSchema encompasses over 5000 human-curated multiple-choice question-answer pairs, spread across more than 250 hours of genuine video data. This dataset captures a vast spectrum of natural human activity and behavior.
 
