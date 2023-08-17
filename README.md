@@ -1,7 +1,7 @@
 
 
 <font size="15">**EgoSchema Dataset** </font><br/>
-<font size="6">A Diagnostic Benchmark for Very Long-form Video Language Understanding </font>
+<font size="6">A Diagnostic Benchmark for Very Long-form Video Language Understanding </font><br/>
 <font size="6" opacity="0.5">Karttikeya Mangalam, Raiymbek Akshulakov, Jitendra Malik</font>
 
 [Webpage](https://egoschema.github.io/) :globe_with_meridians: • [Paper](https://egoschema.github.io/) :newspaper: • [Video](https://youtu.be/_VVoiSzb5E4) :movie_camera:
