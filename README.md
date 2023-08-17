@@ -1,6 +1,6 @@
 
 
-<font size="10">**EgoSchema Dataset** </font>
+<font size="10">**EgoSchema Dataset** </font><br/>
 <font size="5">A Diagnostic Benchmark for Very Long-form Video Language Understanding </font>
 
 [Webpage](https://egoschema.github.io/) :globe_with_meridians: • [Paper](https://egoschema.github.io/) :newspaper: 
