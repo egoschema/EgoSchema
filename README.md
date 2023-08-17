@@ -1,8 +1,9 @@
 
 
-<font size="15">**EgoSchema Dataset** </font><br/>
+
+# EgoSchema Dataset
 <font size="6">A Diagnostic Benchmark for Very Long-form Video Language Understanding </font><br/>
-<font size="4" opacity="0.5">Karttikeya Mangalam, Raiymbek Akshulakov, Jitendra Malik</font>
+<sub>Karttikeya Mangalam, Raiymbek Akshulakov, Jitendra Malik</sub>
 
 [Webpage](https://egoschema.github.io/) :globe_with_meridians: • [Paper](https://egoschema.github.io/) :newspaper: • [Video](https://youtu.be/_VVoiSzb5E4) :movie_camera:
 
@@ -33,7 +34,7 @@ mkdir videos
 python download.py
 ```
 
-This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file.The second script will be faster although less stable. In case google drive limiting issues arise you ca download the dataset at the following link ```https://drive.google.com/drive/folders/1SS0VVz8rML1e5gWq7D7VtP1oxE2UtmhQ?usp=sharing```.You might need to run the download script several times.
+This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file.The second script will be faster although less stable. In case google drive limiting issues arise you ca download the dataset at the following link ```https://drive.google.com/drive/folders/1SS0VVz8rML1e5gWq7D7VtP1oxE2UtmhQ?usp=sharing```
 
 ## Benchmarking EgoSchema
 
