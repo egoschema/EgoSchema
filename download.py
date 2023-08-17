@@ -2,6 +2,9 @@ import requests
 import os
 import json
 from tqdm import tqdm
+import time
+from moviepy.editor import *
+from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip, ffmpeg_resize
 
 def download_from_google_drive(file_id, destination):
     base_url = "https://drive.google.com/uc?export=download"
@@ -17,35 +20,31 @@ def download_from_google_drive(file_id, destination):
     if token:
         response = session.get(base_url, params={'id': file_id, 'confirm': token}, stream=True)
 
-    content_length_drive = int(dict(response.headers).get("Content-Length", 0))
-    
     with open(destination, "wb") as f:
         for chunk in response.iter_content(32768):
             if chunk:
                 f.write(chunk)
 
-    downloaded_file_size = len(open(destination, 'rb').read())
-    
-    if content_length_drive == downloaded_file_size:
-        #print("Download validation successful!")
-        return True
-    else:
-        #print("Download validation failed. Sizes don't match.")
-        return False
+def validate_download(to_print):
+    uploaded = set([vid[:vid.find(".")] for vid in os.listdir("./videos")])
+    for video in tqdm(questions):
+        video_name = video['q_uid']
+        drive_id =  video['google_drive_id']
 
-
-def validate_download(file_id, destination):
-    drive_file_size_url = f"https://drive.google.com/get_video_info?docid={file_id}"
-    response = requests.get(drive_file_size_url)
-    content_length_drive = int(dict(response.headers).get("Content-Length", 0))
-    downloaded_file_size = len(open(destination, 'rb').read())
-    
-    if content_length_drive == downloaded_file_size:
-        #print("Download validation successful!")
-        return True
-    else:
-        #print("Download validation failed. Sizes don't match.")
-        return False
+        if video_name not in uploaded:
+            continue
+            
+        try:
+            clip = VideoFileClip(f"videos/{video_name}.mp4")
+        except Exception as e:
+            print(e)
+            if to_print:
+                print(f"Print: removing: {video_name}")
+            time.sleep(1)
+            os.remove(f"videos/{video_name}.mp4")
+            if to_print:
+                print(f"Having problems with downloading {video_name}. Please install it manually at https://drive.google.com/file/d/{drive_id}/view?usp=drivesdk")
+                print(f"---------------------------------")
 
 
 if __name__ == "__main__":
@@ -53,23 +52,21 @@ if __name__ == "__main__":
     questions_f = open("questions.json")
     questions = json.load(questions_f)
 
+    print("Validating clips that are already uploaded")
+    validate_download(False)
+
     for q in tqdm(questions):
         q_uid = q["q_uid"]
         google_drive_id = q['google_drive_id']
 
         if os.path.exists(f"videos/{q_uid}.mp4"):
             continue
+            
+        download_from_google_drive(google_drive_id, f"videos/{q_uid}.mp4")
+        time.sleep(1)
 
-        downloaded = False
-        for trial in range(5):
-            downloaded = download_from_google_drive(google_drive_id, f"videos/{q_uid}.mp4")
-            if downloaded:
-                break
-
-        if not downloaded:
-            print(f"Having problems with downloading {q_uid}. Please install it manually at https://drive.google.com/file/d/{google_drive_id}/view?usp=drivesdk")
-            if os.path.exists(f"videos/{q_uid}.mp4"):
-                os.remove(f"videos/{q_uid}.mp4")
+    print("Validating clips")
+    validate_download(True)
 
         
             

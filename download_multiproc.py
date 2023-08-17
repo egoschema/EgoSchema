@@ -7,7 +7,6 @@ from multiprocessing import Queue as multi_queue
 import time
 import argparse
 import os
-os.environ["IMAGEIO_FFMPEG_EXE"] = "/home/raiymbek/ffmpeg-git-20220910-amd64-static/ffmpeg"
 from moviepy.editor import *
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip, ffmpeg_resize
 from multiprocessing import active_children
@@ -44,21 +43,10 @@ def download_from_google_drive(file_id, destination):
     if token:
         response = session.get(base_url, params={'id': file_id, 'confirm': token}, stream=True)
 
-    content_length_drive = int(dict(response.headers).get("Content-Length", 0))
-    
     with open(destination, "wb") as f:
         for chunk in response.iter_content(32768):
             if chunk:
                 f.write(chunk)
-
-    downloaded_file_size = len(open(destination, 'rb').read())
-    
-    if content_length_drive == downloaded_file_size:
-        #print("Download validation successful!")
-        return True
-    else:
-        #print("Download validation failed. Sizes don't match.")
-        return False
 
 
 def progress_task(initially_done, the_queue, to_do):
@@ -86,17 +74,7 @@ def task(the_queue):
 
         q_one = the_queue.get()
         google_drive_id = q_one['google_drive_id']
-
-        downloaded = False
-        for trial in range(5):
-            downloaded = download_from_google_drive(google_drive_id, f"videos/{q_one['q_uid']}.mp4")
-            if downloaded:
-                break
-                
-        if not downloaded:
-            print(f"Having problems with downloading {q_one['q_uid']}. Please install it manually at https://drive.google.com/file/d/{google_drive_id}/view?usp=drivesdk")
-            if os.path.exists(f"videos/{q_uid}.mp4"):
-                os.remove(f"videos/{q_uid}.mp4")
+        download_from_google_drive(google_drive_id, f"videos/{q_one['q_uid']}.mp4")
 
 def validate_download(to_print):
     uploaded = set([vid[:vid.find(".")] for vid in os.listdir("./videos")])
@@ -110,7 +88,7 @@ def validate_download(to_print):
         try:
             clip = VideoFileClip(f"videos/{video_name}.mp4")
         except Exception as e:
-            #print(e)
+            print(e)
             if to_print:
                 print(f"Print: removing: {video_name}")
             time.sleep(1)
