@@ -1,6 +1,6 @@
 # Reproducing VIOLETv2 Results on EgoSchema
 
-This readme provides a step by step procedure for evaluating VIOLETv2 on EgoSchema
+This readme provides a step by step procedure for evaluating VIOLETv2 on EgoSchema. Note: all of the benchmarking code requires correct answer to the questions that we will release soon.
 
 ## Prerequisites
 

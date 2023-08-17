@@ -11,6 +11,7 @@ from moviepy.editor import *
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip, ffmpeg_resize
 from multiprocessing import active_children
 import signal
+import gdown
 
 def parse_args():
     """
@@ -30,23 +31,9 @@ def parse_args():
     return parser.parse_args()
 
 def download_from_google_drive(file_id, destination):
-    base_url = "https://drive.google.com/uc?export=download"
-    session = requests.Session()
-
-    response = session.get(base_url, params={'id': file_id}, stream=True)
-    token = None
-    for key, value in response.cookies.items():
-        if key.startswith("download_warning"):
-            token = value
-            break
-
-    if token:
-        response = session.get(base_url, params={'id': file_id, 'confirm': token}, stream=True)
-
-    with open(destination, "wb") as f:
-        for chunk in response.iter_content(32768):
-            if chunk:
-                f.write(chunk)
+    url = f'https://drive.google.com/uc?id={file_id}'
+    gdown.download(url,  destination, quiet=True)
+    time.sleep(5)
 
 
 def progress_task(initially_done, the_queue, to_do):

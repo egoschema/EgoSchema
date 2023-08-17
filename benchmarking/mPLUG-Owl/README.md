@@ -1,7 +1,7 @@
 
 # Benchmarking `mPLUG-Owl` with the EgoSchema Dataset
 
-This guide offers a step-by-step walkthrough to benchmark the `mPLUG-Owl` system with the EgoSchema dataset. For a successful setup and execution, it's essential to follow each step diligently.
+This guide offers a step-by-step walkthrough to benchmark the `mPLUG-Owl` system with the EgoSchema dataset. For a successful setup and execution, it's essential to follow each step diligently. Note: all of the benchmarking code requires correct answer to the questions that we will release soon.
 
 ## Prerequisites
 

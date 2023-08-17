@@ -32,17 +32,8 @@ pip install moviepy
 mkdir videos
 python download.py
 ```
-or 
-```bash
-conda create -n egoschema_download python=3.8 
-conda activate egoschema_download
-conda install tqdm simplejson requests
-pip install moviepy
-mkdir videos
-python download_multiproc.py --p <number of processes>
-```
 
-This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file.The second script will be faster although less stable.
+This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file.The second script will be faster although less stable. In case google drive limiting issues arise you ca download the dataset at the following link ```https://drive.google.com/drive/folders/1SS0VVz8rML1e5gWq7D7VtP1oxE2UtmhQ?usp=sharing```.You might need to run the download script several times.
 
 ## Benchmarking EgoSchema
 

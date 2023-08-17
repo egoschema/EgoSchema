@@ -1,7 +1,7 @@
 
 # Benchmarking `InternVideo` with EgoSchema Dataset
 
-This README provides a comprehensive guide to benchmarking the `InternVideo` system using the EgoSchema dataset. Follow each step methodically to ensure seamless setup and execution.
+This README provides a comprehensive guide to benchmarking the `InternVideo` system using the EgoSchema dataset. Follow each step methodically to ensure seamless setup and execution. Note: all of the benchmarking code requires correct answer to the questions that we will release soon.
 
 ## Prerequisites
 

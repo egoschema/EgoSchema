@@ -1,7 +1,7 @@
 
 # Benchmarking `FrozenBiLM` with EgoSchema Dataset
 
-This guide provides the code for benchmarking the `FrozenBiLM` model using the EgoSchema dataset. Follow the instructions carefully to ensure smooth execution.
+This guide provides the code for benchmarking the `FrozenBiLM` model using the EgoSchema dataset. Follow the instructions carefully to ensure smooth execution. Note: all of the benchmarking code requires correct answer to the questions that we will release soon.
 
 ## Prerequisites
 
