@@ -30,6 +30,7 @@ conda create -n egoschema_download python=3.8
 conda activate egoschema_download
 conda install tqdm simplejson requests
 pip install moviepy
+pip install gdown
 mkdir videos
 python download.py
 ```
