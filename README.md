@@ -2,6 +2,7 @@
 
 <font size="15">**EgoSchema Dataset** </font><br/>
 <font size="6">A Diagnostic Benchmark for Very Long-form Video Language Understanding </font>
+<font size="6" opacity="0.5">Karttikeya Mangalam, Raiymbek Akshulakov, Jitendra Malik</font>
 
 [Webpage](https://egoschema.github.io/) :globe_with_meridians: • [Paper](https://egoschema.github.io/) :newspaper: • [Video](https://youtu.be/_VVoiSzb5E4) :movie_camera:
 
@@ -15,11 +16,9 @@ alt="IMAGE ALT TEXT HERE" width="80%" height="80%" border="10" /></a>
 
 EgoSchema is a pioneering dataset aimed to evaluate the long video understanding capabilities of the contemporary vision and language systems. Derived from Ego4D, EgoSchema encompasses over 5000 human-curated multiple-choice question-answer pairs, spread across more than 250 hours of genuine video data. This dataset captures a vast spectrum of natural human activity and behavior. We introduce temporal certificate sets, a general notion for capturing the intrinsic temporal understanding length associated with a broad range of video understanding tasks & datasets.
 
-:exclamation: Over 5000 curated multiple choice question-answer pairs.<br/>
-:exclamation: More than 250 hours of real video data.<br/>
-:exclamation: EgoSchema possesses intrinsic temporal lengths surpassing 5.7 times that of the second closest dataset and between 10 to 100 times longer than other datasets.<br/>
-:exclamation: The latest high-end video and language models with billions of parameters have struggled to perform well on this dataset. A mere QA accuracy less than 33% (compared to a random choice's 20%) was noted, whereas human performance rests at approximately 76% accuracy.<br/>
-:exclamation: Designed to act as a cornerstone for the future development of highly effective long-term video understanding systems.<br/>
+:exclamation: EgoSchema possesses intrinsic temporal lengths surpassing 5.7 times that of the second closest dataset and between 10 to 100 times longer than other datasets.<br/><br/>
+:exclamation: The latest high-end video and language models with billions of parameters have struggled to perform well on this dataset. A mere QA accuracy less than 33% (compared to a random choice's 20%) was noted, whereas human performance rests at approximately 76% accuracy.<br/><br/>
+:exclamation: Designed to act as a cornerstone for the future development of highly effective long-term video understanding systems.<br/><br/>
 
 ## Downloading the Dataset
 
