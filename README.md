@@ -34,7 +34,7 @@ mkdir videos
 python download.py
 ```
 
-This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file.The second script will be faster although less stable. In case google drive limiting issues arise you ca download the dataset at the following link ```https://drive.google.com/drive/folders/1SS0VVz8rML1e5gWq7D7VtP1oxE2UtmhQ?usp=sharing```
+This will fetch the dataset and save it in the `videos` folder. The naming convention for the videos corresponds to the `q_uid` key in the `questions.json` file. Run it second time in case some clips fail the download. In case google drive limiting issues arise you ca download the dataset at the following link ```https://drive.google.com/drive/folders/1SS0VVz8rML1e5gWq7D7VtP1oxE2UtmhQ?usp=sharing```
 
 ## Benchmarking EgoSchema
 
