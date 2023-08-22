@@ -1,137 +1,107 @@
 import requests
 import os
 import json
-from tqdm import tqdm
-import multiprocessing
-from multiprocessing import Queue as multi_queue
 import time
 import argparse
-import os
-from moviepy.editor import *
-from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip, ffmpeg_resize
-from multiprocessing import active_children
+import multiprocessing
+from moviepy.editor import VideoFileClip
 import signal
-import gdown
+import sys
 
 def parse_args():
-    """
-    Parse the following arguments for a default parser
-    """
-    parser = argparse.ArgumentParser(
-        description="Getting dataset on dataset segment"
-    )
-    
-    parser.add_argument(
-        "--p",
-        dest="process_num",
-        help="number of processes",
-        default=4,
-        type=int,
-    )
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(description="Download dataset segments.")
+    parser.add_argument("--p", dest="process_num", default=4, type=int, help="Number of processes")
     return parser.parse_args()
 
-def download_from_google_drive(file_id, destination):
-    url = f'https://drive.google.com/uc?id={file_id}'
-    gdown.download(url,  destination, quiet=True)
-    time.sleep(5)
-
+def download_from_wasabi(url, destination, retries=3):
+    """Download a file from the given URL and save it to the destination path."""
+    for _ in range(retries):
+        try:
+            response = requests.get(url, stream=True)
+            response.raise_for_status()
+            with open(destination, 'wb') as fd:
+                for chunk in response.iter_content(chunk_size=1024*1024):
+                    fd.write(chunk)
+            return True
+        except requests.RequestException as e:
+            print(f"[ERROR] Issue downloading video: {e}. Retrying...")
+    print("[WARNING] Please update uid_to_url.json. The URLs seem outdated.")
+    return False
 
 def progress_task(initially_done, the_queue, to_do):
-    print("Done: -1%. Time left: -1 seconds", flush=True, end='\r')
-            
+    """Print the progress of tasks being done."""
     start = time.time()
     while not the_queue.empty():
         time.sleep(1)
         done = to_do - the_queue.qsize()
-            
         speed = done / (time.time() - start)
         rest = to_do - done
-            
-        if speed == 0:
-            time_left = -1
-        else:
-            time_left = rest / speed
-        
-        print(f"Done: {100 * (initially_done + done) / (initially_done + to_do)}%. Time left: {time_left / 60} minutes", end='\r', flush = True)
+        time_left = rest / speed if speed else -1
+        print(f"Done: {100 * (initially_done + done) / (initially_done + to_do)}%. Time left: {time_left / 60:.2f} minutes", end='\r', flush=True)
 
 def task(the_queue):
-    while True:
-        if the_queue.empty():
-            break
-
+    """Download task using multiprocessing."""
+    while not the_queue.empty():
         q_one = the_queue.get()
-        google_drive_id = q_one['google_drive_id']
-        download_from_google_drive(google_drive_id, f"videos/{q_one['q_uid']}.mp4")
+        download_from_wasabi(uid_to_url[q_one], os.path.join("videos", f"{q_one}.mp4"))
 
-def validate_download(to_print):
-    uploaded = set([vid[:vid.find(".")] for vid in os.listdir("./videos")])
-    for video in tqdm(questions):
+def validate_download():
+    """Validate the integrity of downloaded videos."""
+    uploaded = set([vid.split(".")[0] for vid in os.listdir("./videos")])
+    for video in questions:
         video_name = video['q_uid']
-        drive_id =  video['google_drive_id']
-
+        drive_id = video['google_drive_id']
         if video_name not in uploaded:
             continue
-            
         try:
-            clip = VideoFileClip(f"videos/{video_name}.mp4")
+            _ = VideoFileClip(os.path.join("videos", f"{video_name}.mp4"))
         except Exception as e:
-            print(e)
-            if to_print:
-                print(f"Print: removing: {video_name}")
+            print(f"[ERROR] {e}\nRemoving: {video_name}")
+            os.remove(os.path.join("videos", f"{video_name}.mp4"))
             time.sleep(1)
-            os.remove(f"videos/{video_name}.mp4")
-            if to_print:
-                print(f"Having problems with downloading {video_name}. Please install it manually at https://drive.google.com/file/d/{drive_id}/view?usp=drivesdk")
-                print(f"---------------------------------")
+            print(f"[INFO] Problems with {video_name}. Download manually at: https://drive.google.com/file/d/{drive_id}/view?usp=drivesdk")
+            print("----------")
 
 def signal_handler(sig, frame):
-    print("Stopping all the processes")
-    active = active_children()
-    for child in active:
+    """Handle termination signals."""
+    print("[INFO] Stopping all processes.")
+    for child in multiprocessing.active_children():
         child.terminate()
     sys.exit(0)
-    
 
 if __name__ == "__main__":
     args = parse_args()
 
-    questions_f = open("questions.json")
-    questions = json.load(questions_f)
+    # Load necessary JSON files
+    with open("questions.json") as questions_f:
+        questions = json.load(questions_f)
 
-    q_uid_to_drive = {q['q_uid']:q['google_drive_id'] for q in questions}
+    with open("uid_to_url.json") as uid_to_url_f:
+        uid_to_url = json.load(uid_to_url_f)
 
-    uploaded = set([vid[:vid.find(".")] for vid in os.listdir("./videos")])
+    uploaded = set([vid.split(".")[0] for vid in os.listdir("videos")])
     signal.signal(signal.SIGINT, signal_handler)
 
-    print("Validating clips that are already uploaded")
-    validate_download(False)
-
-    the_queue = multi_queue()
+    the_queue = multiprocessing.Queue()
     for q in questions:
         q_uid = q["q_uid"]
-
         if q_uid not in uploaded:
-            the_queue.put(q)
+            the_queue.put(q_uid)
 
     initially_done = len(uploaded)
-    to_do = len(questions) - 1 - initially_done
-    progress_process = multiprocessing.Process(target=progress_task, args=(initially_done, the_queue, to_do))
+    to_do = len(questions) - initially_done
 
-    procceses = []
-    for i in range(args.process_num):
-        p1 = multiprocessing.Process(target=task, args=(the_queue,))
-        procceses.append(p1)
-        
+    # Start multiprocessing processes
+    progress_process = multiprocessing.Process(target=progress_task, args=(initially_done, the_queue, to_do))
+    processes = [multiprocessing.Process(target=task, args=(the_queue,)) for _ in range(args.process_num)]
+    
     progress_process.start()
-    for p in procceses:
+    for p in processes:
         p.start()
-        
-    for p in procceses:
+    for p in processes:
         p.join()
     progress_process.join()
 
-    print("Validating clips")
-    validate_download(True)
-
-        
-            
+    print("\n[INFO] Validating clips.")
+    validate_download()

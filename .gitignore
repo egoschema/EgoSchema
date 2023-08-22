@@ -163,5 +163,4 @@ benchmarking/InternVideo/InternVideo
 benchmarking/mPLUG-Owl/mPLUG-Owl
 benchmarking/FrozenBilm/FrozenBiLM
 benchmarking/Violet/pytorch_empirical-mvm
-download_multiproc.py
-download_multiproc.py
+uid_to_url.json

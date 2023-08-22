@@ -3,18 +3,30 @@ import os
 import json
 from tqdm import tqdm
 import time
-import gdown
-#os.environ["IMAGEIO_FFMPEG_EXE"] = "../../../ffmpeg-git-20220910-amd64-static/ffmpeg"
-from moviepy.editor import *
-from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip, ffmpeg_resize
+from moviepy.editor import VideoFileClip
 
-def download_from_google_drive(file_id, destination):
-    url = f'https://drive.google.com/uc?id={file_id}'
-    gdown.download(url,  destination, quiet=True)
-    time.sleep(2)
+def download_from_wasabi(url, destination, retries=3):
+    """Download a file from the given URL and save it to the destination path."""
+    for _ in range(retries):
+        try:
+            response = requests.get(url, stream=True)
+            response.raise_for_status()  # Raise an exception for HTTP errors
 
-def validate_download(to_print):
-    uploaded = set([vid[:vid.find(".")] for vid in os.listdir("./videos")])
+            # Save the video in chunks
+            with open(destination, 'wb') as fd:
+                for chunk in response.iter_content(chunk_size=1024*1024):  # 1MB chunks
+                    fd.write(chunk)
+            return True
+        except requests.RequestException as e:
+            print(f"[ERROR] Issue downloading video: {e}. Retrying...")
+    print("[WARNING] Please update uid_to_url.json. The URLs seem outdated.")
+    return False
+
+
+def validate_download(questions):
+    """Check the integrity of downloaded videos and remove corrupted files."""
+    uploaded = set([vid.split(".")[0] for vid in os.listdir("videos")])
+    
     for video in tqdm(questions):
         video_name = video['q_uid']
         drive_id =  video['google_drive_id']
@@ -23,38 +35,30 @@ def validate_download(to_print):
             continue
             
         try:
-            clip = VideoFileClip(f"videos/{video_name}.mp4")
-        except Exception as e:
-            print(e)
-            if to_print:
-                print(f"Print: removing: {video_name}")
+            _ = VideoFileClip(os.path.join("videos", f"{video_name}.mp4"))
+        except Exception:
+            print(f"[ERROR] Issue with {video_name}.mp4. Removing...")
+            os.remove(os.path.join("videos", f"{video_name}.mp4"))
             time.sleep(1)
-            os.remove(f"videos/{video_name}.mp4")
-            if to_print:
-                print(f"Having problems with downloading {video_name}. Please install it manually at https://drive.google.com/file/d/{drive_id}/view?usp=drivesdk")
-                print(f"---------------------------------")
+            print(f"[INFO] Having issues with {video_name}. Please rerun the download script or manually download from: https://drive.google.com/file/d/{drive_id}/view?usp=drivesdk")
 
 
 if __name__ == "__main__":
+    # Load necessary JSON files
+    with open("questions.json") as questions_f:
+        questions = json.load(questions_f)
 
-    questions_f = open("questions.json")
-    questions = json.load(questions_f)
+    with open("uid_to_url.json") as uid_to_url_f:
+        uid_to_url = json.load(uid_to_url_f)
 
-    print("Validating clips that are already uploaded")
-    validate_download(False)
-
+    # Download videos
     for q in tqdm(questions):
         q_uid = q["q_uid"]
-        google_drive_id = q['google_drive_id']
 
-        if os.path.exists(f"videos/{q_uid}.mp4"):
-            continue
-            
-        download_from_google_drive(google_drive_id, f"videos/{q_uid}.mp4")
-        time.sleep(1)
+        if not os.path.exists(os.path.join("videos", f"{q_uid }.mp4")):
+            download_from_wasabi(uid_to_url[q_uid], os.path.join("videos", f"{q_uid}.mp4"))
+            time.sleep(1)
 
-    print("Validating clips")
-    validate_download(True)
-
-        
-            
+    # Validate the integrity of downloaded videos
+    print("[INFO] Validating clips...")
+    validate_download(questions)
