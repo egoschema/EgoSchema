@@ -40,7 +40,7 @@ def progress_task(initially_done, the_queue, to_do):
         time_left = rest / speed if speed else -1
         print(f"Done: {100 * (initially_done + done) / (initially_done + to_do)}%. Time left: {time_left / 60:.2f} minutes", end='\r', flush=True)
 
-def task(the_queue):
+def task(the_queue, uid_to_url):
     """Download task using multiprocessing."""
     while not the_queue.empty():
         q_one = the_queue.get()
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
     # Start multiprocessing processes
     progress_process = multiprocessing.Process(target=progress_task, args=(initially_done, the_queue, to_do))
-    processes = [multiprocessing.Process(target=task, args=(the_queue,)) for _ in range(args.process_num)]
+    processes = [multiprocessing.Process(target=task, args=(the_queue, uid_to_url)) for _ in range(args.process_num)]
     
     progress_process.start()
     for p in processes:
