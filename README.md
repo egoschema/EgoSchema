@@ -54,6 +54,13 @@ python download_multiproc.py --p <number of processes>
 
 This script accelerates the download process by running multiple processes concurrently. Please be aware that this method might hit the rate limit. If the script fails after running for a while, revert to the `download.py` script.
 
-## Benchmarking EgoSchema
+## Answer release
 
-For those keen on benchmarking using the EgoSchema dataset, detailed instructions for various models have been compiled. Navigate to the `benchmarking` directory for comprehensive guides and setup processes for each model. Please note that all benchmarking codes will require the correct answers to the questions, which will be made available soon.
+We are pleased to announce the release of correct answers for a select subset of the EgoSchema. Interested parties are encouraged to refer to the `subset_answers.json` file. The format is a dictionary with the structure: `<question uid>` as the key, and `<correct answer>` as the associated value. The `<correct answer>` is among the values 0,1,2,3,4.
+
+## Benchmarking EgoSchema (currently updating)
+
+For those interested in benchmarking against the EgoSchema dataset, we have curated detailed instructions tailored for various models. You can find these comprehensive guides, along with setup procedures, in the `benchmarking` directory. 
+
+## Validating Models against EgoSchema
+To evaluate the performance of your custom model on EgoSchema, we provide a validation mechanism. First, prepare a JSON file that contains a dictionary structured as `<question uid>` for the key and `<correct answer>` (where the answer is among the values 0,1,2,3,4) for the value. Subsequently, execute the command `python validate.py --f <path_to_json_file>` to validate your model's predictions. Post validation, you will be presented with performance metrics both for the entirety of EgoSchema and for the specific subset for which we have released the correct answers.

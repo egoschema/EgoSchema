@@ -7,6 +7,7 @@ import multiprocessing
 from moviepy.editor import VideoFileClip
 import signal
 import sys
+from tqdm import tqdm
 
 def parse_args():
     """Parse command line arguments."""
@@ -49,7 +50,7 @@ def task(the_queue, uid_to_url):
 def validate_download():
     """Validate the integrity of downloaded videos."""
     uploaded = set([vid.split(".")[0] for vid in os.listdir("./videos")])
-    for video in questions:
+    for video in tqdm(questions):
         video_name = video['q_uid']
         drive_id = video['google_drive_id']
         if video_name not in uploaded:
