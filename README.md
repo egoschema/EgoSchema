@@ -3,11 +3,14 @@
 <h2 align="center">  EgoSchema: A Diagnostic Benchmark for Very Long-form Video 
 Language Understanding </h2>
 
-<center> <a href="https://karttikeya.github.io/)">Karttikeya Mangalam</a>,  <a href="https://www.linkedin.com/in/raiymbek-akshulakov)">Raiymbek Akshulakov</a>,  <a href="https://people.eecs.berkeley.edu/~malik/)">Jitendra Malik</a> </center>
-<br/>
-<center> Berkeley AI Research, UC Berkeley </center>
+<p align="center">
+    <a href="https://karttikeya.github.io/)">Karttikeya Mangalam</a>,  <a href="https://www.linkedin.com/in/raiymbek-akshulakov)">Raiymbek Akshulakov</a>,  <a href="https://people.eecs.berkeley.edu/~malik/)">Jitendra Malik</a> 
+</p>
+
 <br/>
 
+<p align="center"> Berkeley AI Research, UC Berkeley </p>
+<br/>
 
 :globe_with_meridians: [Webpage](https://egoschema.github.io/)  | :book: [Paper](https://arxiv.org/abs/2308.09126)  | :movie_camera: [Teaser Video](https://youtu.be/_VVoiSzb5E4)  | :microphone: [4-min Podcast](https://www.podbean.com/media/share/pb-sj7gk-148d8bc?)  |  :speaking_head: [Overview Talk Video]() | :bar_chart: [Statistics Dashboard](https://public.tableau.com/views/EgoSchema/EGOSchema?:showVizHome=no)
 
