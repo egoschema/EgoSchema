@@ -21,6 +21,9 @@ import argparse
 import json
 torch.manual_seed(0)
 
+ViT = '/old_home_that_will_be_deleted_at_some_point/raiymbek/InternVideo/Downstream/multi-modalities-downstream/ViT-L-14.pt'
+MSRVTT = '/old_home_that_will_be_deleted_at_some_point/raiymbek/InternVideo/Downstream/multi-modalities-downstream/MSRVTT.ckpt'
+
 CONFIG = {'exp_name': 'clip_kc_nc_finetune_msrvttchoice', 
           'seed': 0, 
           'video_datasets': ['msrvtt_choice'], 
@@ -110,11 +113,11 @@ CONFIG = {'exp_name': 'clip_kc_nc_finetune_msrvttchoice',
           'per_gpu_batchsize': 1, 
           'num_gpus': 1, 
           'num_nodes': '', 
-          'load_path': 'MSRVTT.ckpt', 
+          'load_path': MSRVTT, 
           'num_workers': 1, 
           'precision': 16, 
           'model_dir': '//models/', 
-          'clip': 'ViT-L-14.pt', 
+          'clip': ViT, 
           'clip_type': 'kc_new', 
           'clip_freeze': False, 
           'clip_freeze_text': False, 
@@ -202,7 +205,7 @@ if __name__ == '__main__':
             best = the_best[0]
         else:
             best = random.choice(the_best)
-        result[batch['q_uid']] = best
+        results[batch['q_uid'][0]] = best
         i+=1
 
         with open(f"InternVid_save_result_{frames}.json", 'w') as f:
