@@ -1,7 +1,7 @@
 
 # Benchmarking `InternVideo` with EgoSchema Dataset
 
-This README provides a comprehensive guide to benchmarking the `InternVideo` system using the EgoSchema dataset. Follow each step methodically to ensure seamless setup and execution. Note: all of the benchmarking code requires correct answer to the questions that we will release soon.
+This README provides a comprehensive guide to benchmarking the `InternVideo` system using the EgoSchema dataset. Follow each step methodically to ensure seamless setup and execution.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Ensure you have the EgoSchema dataset downloaded and readily available.
 ### 2. Configuration Adjustments
 
 Navigate to the `disguise.ipynb` file:
-- Update `EGOSCHEMA_FOLDER` with the path pointing to the EgoSchema dataset.
+- Update `EGOSCHEMA_FOLDER` with the path pointing to the EgoSchema folder.
 
 ## Installation and Configuration
 
@@ -26,15 +26,16 @@ git clone https://github.com/OpenGVLab/InternVideo.git
 
 Subsequently:
 - Closely follow the onboarding steps detailed on their official documentation.
-- Ensure you install both `InternVideo's MSRVTT` and `Vit-L-14 finetuned weights`.
+- Install CLIP Vit-L-14 weights file `ViT-L-14.pt` at https://openaipublic.azureedge.net/clip/models/b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836/ViT-L-14.pt
+- Install InternVideo's MSRVTT weight file `MSRVTT.ckpt` by submitting InternVideo form avaliable on their github page.
 
 ### Step 2: Positioning Code Files
 
-Place the provided code files and directories into `Downstream/multi-modalities-downstream`.
+Place the `run_internvideo.py` and `disguise.ipynb` files as well as `meta_data` folder into `Downstream/multi-modalities-downstream`. Additionally place the weights files `MSRVTT.ckpt` and `ViT-L-14.pt` in the `Downstream/multi-modalities-downstream`.
 
 ### Step 3: Question Formatting
 
-Execute the `disguise.ipynb` Jupyter notebook. This script will transform the questions into a format compatible with `msrvtt`.
+Execute the `disguise.ipynb` Jupyter notebook. This script will transform the questions into a format compatible with `msrvtt` and fill the meta_data folder appropriatelly.
 
 ### Step 4: Modify `objectives.py` File
 

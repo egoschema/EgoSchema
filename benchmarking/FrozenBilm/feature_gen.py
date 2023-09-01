@@ -3,7 +3,7 @@ import os
 import numpy as np 
 import argparse
 
-EGOSCHEMA_FOLDER = "../../EgoSchema"
+EGOSCHEMA_FOLDER = "../../../EgoSchema"
 WEIGHTS_PATH = "/home/raiymbek/frozenbilm_how2qa.pth"
 
 
@@ -128,5 +128,3 @@ if __name__ == "__main__":
                     np.save(output_file, features)
             else:
                 print("Video {} already processed.".format(input_file))
-
-    

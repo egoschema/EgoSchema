@@ -202,8 +202,7 @@ if __name__ == '__main__':
             best = the_best[0]
         else:
             best = random.choice(the_best)
-        truth = int(res['ground_truth'][0])
-        results[i] = [best, truth]
+        result[batch['q_uid']] = best
         i+=1
 
         with open(f"InternVid_save_result_{frames}.json", 'w') as f:
