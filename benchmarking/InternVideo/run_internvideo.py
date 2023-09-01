@@ -21,8 +21,8 @@ import argparse
 import json
 torch.manual_seed(0)
 
-ViT = '/old_home_that_will_be_deleted_at_some_point/raiymbek/InternVideo/Downstream/multi-modalities-downstream/ViT-L-14.pt'
-MSRVTT = '/old_home_that_will_be_deleted_at_some_point/raiymbek/InternVideo/Downstream/multi-modalities-downstream/MSRVTT.ckpt'
+ViT = 'ViT-L-14.pt'
+MSRVTT = 'MSRVTT.ckpt'
 
 CONFIG = {'exp_name': 'clip_kc_nc_finetune_msrvttchoice', 
           'seed': 0, 

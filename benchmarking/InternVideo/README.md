@@ -32,7 +32,7 @@ Subsequently:
 
 ### Step 2: Positioning Code Files
 
-Place the `run_internvideo.py` and `disguise.ipynb` files as well as `meta_data` folder into `Downstream/multi-modalities-downstream`. Additionally place the weights files `MSRVTT.ckpt` and `ViT-L-14.pt` in the `Downstream/multi-modalities-downstream`.
+Place the `run_internvideo.py` and `disguise.ipynb` files as well as place the weights files `MSRVTT.ckpt` and `ViT-L-14.pt` in the `Downstream/multi-modalities-downstream`.
 
 ### Step 3: Question Formatting
 
@@ -129,6 +129,9 @@ setattr(pl_module, f"{split}_{k}_accuracy", Accuracy())
 This modification just fixes some issues the codebase. There might be other small bugs.
 
 ### Step 8: Run Benchmark Script
+
+- Update `ViT` with the path pointing to the previously downloaded ViT weights file
+- Update `MSRVTT` with the path pointing to the previously downloaded `MSRVTT` weights file
 
 Execute the `run_internvideo.py` script:
 
