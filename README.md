@@ -66,8 +66,7 @@ While we release all the video and questions from EgoSchema, we release the corr
 - **Step 2**:  Run `python validate.py --f <path_to_json_file>` to send the request to EgoSchema server,
 
 **Option B (directly using CURL):** 
-- fef
-
+- `curl -X POST -H "Content-Type: application/json" -d @<path_to_json_file> https://validation-server.onrender.com/api/upload/`
 **Returned Payload** will contain the Multiple-Choice Question-Answer accuracy in the following text format: 
 ```
 MCQ Accuracy for All of 5031 EgoSchema Questions
