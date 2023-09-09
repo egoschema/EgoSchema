@@ -75,7 +75,7 @@ Public Kaggle leaderboard. The primary means of submitting the results.
   
 - **Step 1**:  Visit Kaggle [Public API guide](https://www.kaggle.com/docs/api) and install and authenticate Kaggle CLI.
 - **Step 2**: Visit the [Egoschema competition page](https://www.kaggle.com/competitions/egoschema-public/overview), read and accept the rules in order to make submissions. Additionally read the submission procedure overview in the competition landing page.
-- **Step 3**:  You can use Kaggel CLI to submit your results. **Use `egoschema-public` as competition name.**
+- **Step 3**:  You can use Kaggle CLI to submit your results. **Use `egoschema-public` as competition name.**
 ```
 usage: kaggle competitions submit [-h] -f FILE_NAME -m MESSAGE [-q]
                                   [competition]
