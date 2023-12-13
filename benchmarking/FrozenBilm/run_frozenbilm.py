@@ -39,9 +39,6 @@ device = torch.device("cuda")
 EGOSCHEMA_FOLDER = "../../../"
 WEIGHTS_PATH = "/home/raiymbek/frozenbilm_how2qa.pth"
 
-
-
-
 def parse_args():
     """
     Parse the following arguments for a default parser
@@ -59,21 +56,17 @@ def parse_args():
     return parser.parse_args()
 
 
-def bilm(q_uid, question, answer, wrong_answers, result):
-
-    key = "full_bilm_pred"
-
-    if key in result:
-        return {}
+def bilm(q_uid, question, options):
 
     with torch.no_grad():
         try:
-            video = torch.from_numpy(np.load(f"./features/{q_uid}.npy").astype("float32"))
-        except:
-            return {key:  -1} 
+            video = torch.from_numpy(np.load(f"./features_{frame_count}/{q_uid}.npy").astype("float32"))
+        except Exception as e:
+            print(e)
+            return -1
         
         if video.shape[0] != frame_count:
-            return {key:  -1} 
+            return -1 
         video = video.unsqueeze(0).cuda()
         video_mask = get_mask(
             torch.tensor(frame_count, dtype=torch.long).unsqueeze(0), video.size(1)
@@ -82,9 +75,7 @@ def bilm(q_uid, question, answer, wrong_answers, result):
         if question[-1] != "?":
             question = question + "?"
 
-        multiple_choice = [w.lower().strip() for w in wrong_answers]
-        multiple_choice.append(answer.lower().strip())
-
+        multiple_choice = [w.lower().strip() for w in options]
         logits_list = []
         for choice in multiple_choice:
             text = f"Question: {question.capitalize()} Is it '{choice.capitalize()}'? {tokenizer.mask_token}."
@@ -92,7 +83,7 @@ def bilm(q_uid, question, answer, wrong_answers, result):
             encoded = tokenizer(
                 [text],
                 add_special_tokens=True,
-                max_length=300,
+                max_length=500,
                 padding="longest",
                 truncation=True,
                 return_tensors="pt")
@@ -112,7 +103,7 @@ def bilm(q_uid, question, answer, wrong_answers, result):
             yes_scores = torch.stack(logits_list, 1)[0]
         except Exception as e:
             print(logits_list)
-            return {key: -1}
+            return -1
         
         prediction = int(torch.argmax(yes_scores).cpu())
             
@@ -120,10 +111,7 @@ def bilm(q_uid, question, answer, wrong_answers, result):
         del video_mask
         del logits
         torch.cuda.empty_cache()
-        
-        if prediction != 4:
-            return {key: prediction}
-        return {key: prediction}
+        return prediction
 
 def main():
     result = []
@@ -133,32 +121,16 @@ def main():
     if os.path.isfile(f"{result_folder}/{result_file_name}.json"):
         current_results_f = open(f"{result_folder}/{result_file_name}.json") 
         current_results = json.load(current_results_f)
-    q_uid_to_res = {current_results[res]['q_uid']: current_results[res] for res in current_results.keys()}
         
     for q_dict in tqdm(qa_data):
         q_uid = q_dict['q_uid']
         q = q_dict['question']
         options = [q_dict['option 0'], q_dict['option 1'], q_dict['option 2'], q_dict['option 3'], q_dict['option 4']]
-        correct_answer = q_dict['correct_answer']
-        correct_option = options.pop(correct_answer)
         
-        result = {}
-        if q_uid in q_uid_to_res:
-            result = q_uid_to_res[q_uid]
+        if q_uid in current_results:
             continue
         
-        result["q_uid"] = q_uid
-        result["q"] = q
-        result["a"] = correct_option
-        result["w"] = options
-               
-        output = bilm(q_uid, q, correct_option, options, result)
-        try:
-            result.update(output)
-        except:
-            print(output)
-            continue
-        current_results[q_uid] = result
+        current_results[q_uid] = bilm(q_uid, q, options)
         with open(f"{result_folder}/{result_file_name}.json", 'w') as f:
             json.dump(current_results, f)
     
@@ -183,7 +155,7 @@ if __name__ == "__main__":
         pretrained_model_name_or_path="microsoft/deberta-v2-xlarge",
         )
 
-    checkpoint = torch.load("/home/raiymbek/frozenbilm_how2qa.pth", map_location="cpu")
+    checkpoint = torch.load(WEIGHTS_PATH, map_location="cpu")
     model.load_state_dict(checkpoint["model"], strict=False)
     
     model.cuda()
@@ -213,7 +185,7 @@ if __name__ == "__main__":
     if not os.path.exists(result_folder):
         os.mkdir(result_folder)
         
-    qa_data_f = open(f"{EGOSCHEMA_FOLDER}/questions_with_correct.json")
+    qa_data_f = open(f"{EGOSCHEMA_FOLDER}/questions.json")
     qa_data = json.load(qa_data_f)
     
     main()

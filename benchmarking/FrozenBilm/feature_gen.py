@@ -4,8 +4,7 @@ import numpy as np
 import argparse
 
 EGOSCHEMA_FOLDER = "../../../EgoSchema"
-WEIGHTS_PATH = "/home/raiymbek/frozenbilm_how2qa.pth"
-
+VID_FOLDER = f"{EGOSCHEMA_FOLDER}/videos"
 
 def parse_args():
     """
@@ -32,7 +31,7 @@ if __name__ == "__main__":
         os.mkdir(f"features")
         
     total = 0
-    VID_PATH = f"{EGOSCHEMA_FOLDER}/videos"
+    VID_PATH = VID_FOLDER
     
     to_add = []
     for q_uid in os.listdir(f"{VID_PATH}"):

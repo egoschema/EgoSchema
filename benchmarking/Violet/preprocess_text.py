@@ -8,7 +8,7 @@ EGOSCHEMA_FOLDER = "../../../../"
 
 def preprocess_text():
     output_file_path = "./txt_egoSchema-mc.json"
-    questions_f = open(f"{EGOSCHEMA_FOLDER}/questions_with_correct.json")
+    questions_f = open(f"{EGOSCHEMA_FOLDER}/questions.json")
     questions = json.load(questions_f)
 
     # Create output JSON file data

@@ -16,8 +16,8 @@ import random
 import argparse
 
 EGOSCHEMA_FOLDER = "../../../"
-CHECKPOINT_PATH = "instruction_tuned.pht"
-TOKENIZER_PATH = "tokenizer.pht"
+CHECKPOINT_PATH = "/old_home_that_will_be_deleted_at_some_point/raiymbek/mPLUG-Owl/instruction_tuned.pht"
+TOKENIZER_PATH = "/old_home_that_will_be_deleted_at_some_point/raiymbek/mPLUG-Owl/tokenizer.pht"
 
 def parse_args():
     """
@@ -38,8 +38,8 @@ def parse_args():
         "--g",
         dest="gpu",
         help="gpu to use",
-        default="0",
-        type=str,
+        default=0,
+        type=int,
     )
 
     return parser.parse_args()
@@ -72,7 +72,7 @@ def get_model(checkpoint_path=None, tokenizer_path=None, peft_config=None, devic
 
 if __name__ == '__main__':
     args = parse_args()
-    os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
+    torch.cuda.set_device(args.gpu)
     torch.cuda.empty_cache()
     with torch.no_grad():
         model, tokenizer, img_processor = get_model(checkpoint_path=CHECKPOINT_PATH, 
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     model = model.eval()
     f = open('q_prompt.txt','r')
     qa_prompt = f.read()
-    questions_f = open(f"{EGOSCHEMA_FOLDER}/questions_with_correct.json")
+    questions_f = open(f"{EGOSCHEMA_FOLDER}/questions.json")
     questions = json.load(questions_f)
     frames = args.frames
     folder = f"frames_{frames}"
@@ -95,20 +95,19 @@ if __name__ == '__main__':
         results = {}
 
     YES_EMBED = [3869, 22483]
+    random.seed(1998)
     for q_dict in tqdm(questions):
         q_uid = q_dict['q_uid']
         q = q_dict['question']
         options = [q_dict['option 0'], q_dict['option 1'], q_dict['option 2'], q_dict['option 3'], q_dict['option 4']]
-        correct_answer = q_dict['correct_answer']
-        correct_option = options.pop(correct_answer)
     
         if q_uid in results:
+            seed_continuity = random.choice([0])
             continue
     
-        aw_options = [correct_option] + options
         confidence = []
             
-        for option in aw_options:
+        for option in options:
             qa_string = f"Given question '{q}, is answer '{option}' correct?"
             images_folder = f"{folder}/{q_uid}"
             images_paths = [f"{images_folder}/{im}" for im in os.listdir(images_folder) if "ipynb" not in im]
@@ -142,9 +141,6 @@ if __name__ == '__main__':
             sentence_embeddings = res.sequences
             sentence = tokenizer.decode(sentence_embeddings.tolist()[0], skip_special_tokens=True)
             scores = res.scores
-    
-            if " no " in " " + sentence.lower():
-                print(sentence)
 
             is_there_yes = False
             for yes_embeddings in YES_EMBED:
@@ -162,6 +158,7 @@ if __name__ == '__main__':
         best_score = np.max(confidence)
         the_best = [i for i in range(5) if confidence[i] == best_score]
         if len(the_best) == 1:
+            seed_continuity = random.choice([0])
             best = the_best[0]
         else:
             best = random.choice(the_best)

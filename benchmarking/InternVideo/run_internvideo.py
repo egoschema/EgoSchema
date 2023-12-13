@@ -21,8 +21,8 @@ import argparse
 import json
 torch.manual_seed(0)
 
-ViT = 'ViT-L-14.pt'
-MSRVTT = 'MSRVTT.ckpt'
+ViT = '/old_home_that_will_be_deleted_at_some_point/raiymbek/InternVideo/Downstream/multi-modalities-downstream/ViT-L-14.pt'
+MSRVTT = '/old_home_that_will_be_deleted_at_some_point/raiymbek/InternVideo/Downstream/multi-modalities-downstream/MSRVTT.ckpt'
 
 CONFIG = {'exp_name': 'clip_kc_nc_finetune_msrvttchoice', 
           'seed': 0, 
@@ -166,7 +166,7 @@ def parse_args():
         "--g",
         dest="gpu",
         help="gpu to use",
-        default="",
+        default="0",
         type=str,
     )
 
@@ -198,10 +198,14 @@ if __name__ == '__main__':
     random.seed(1998)
     i = 0
     for batch in tqdm(batch_gen):
+        if batch['q_uid'][0] in results:
+            seed_continuity = random.choice([0])
+            continue
         res = model(batch)
         best_score = torch.max(res['score'][0])
         the_best = [i for i in range(5) if res['score'][0][i] == best_score]
         if len(the_best) == 1:
+            seed_continuity = random.choice([0])
             best = the_best[0]
         else:
             best = random.choice(the_best)

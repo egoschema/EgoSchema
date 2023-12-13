@@ -7,8 +7,9 @@ This guide provides the code for benchmarking the `FrozenBiLM` model using the E
 
 1. **Download the EgoSchema Dataset**: Before proceeding, make sure you have the EgoSchema dataset downloaded and ready.
 
-2. **Configuration Updates**: Open `run_frozenbilm.py`:
+2. **Configuration Updates**: Open `run_frozenbilm.py`, `feature_gen.py`, `feature_gen.ipynb`:
     - Set `EGOSCHEMA_FOLDER` to the path where the EgoSchema dataset resides.
+    - Set `VID_FOLDER` to the path where the EgoSchema video folder resides.
     - Update `WEIGHTS_PATH` with the path leading to the `FrozenBiLM how2qa finetuned weights`.
 
 ## Setup and Execution Steps
@@ -47,5 +48,3 @@ Parameters:
 - `--f`: Specifies the number of frames utilized during feature generation. The default value is `10`.
 
 On successful execution, a JSON file will be generated, encapsulating the model's predictions for each question in the dataset.
-
-**Note**: The correct answer corresponds to the output labeled `4`.

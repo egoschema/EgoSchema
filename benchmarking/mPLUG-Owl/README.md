@@ -15,7 +15,7 @@ Ensure the EgoSchema dataset is downloaded and easily accessible before proceedi
 1. Clone the specific branch of the `mPLUG-Owl` repository:
 
 ```bash
-git clone -b v0 https://github.com/OpenGVLab/InternVideo.git
+git clone -b v0 https://github.com/X-PLUG/mPLUG-Owl.git
 ```
 
 2. Adhere to the onboarding instructions detailed in their official documentation.
@@ -33,9 +33,13 @@ Transfer the provided code files into the cloned `mPLUG-Owl` directory.
 
 1. Open `framing.ipynb` or `framing.py`:
     - Set `EGOSCHEMA_FOLDER` to the path of the EgoSchema dataset.
-    - Define the number of frames you wish to extract by adjusting the `frames` variable.
+    - Set `VID_FOLDER` to the path of the EgoSchema video folder.
+  
+2. For `framing.py` you can specify `--f` to set the amount of frames to extract, `--p` to set the amount of parallel processes.
+
+3. For `framing.ipynb` you can specify `frames` variable to set the amount of frames to extract, `processes` variable to set the amount of parallel processes.
     
-2. Running `framing.ipynb` or `framing.py`will create a directory named `frame_{number of frames}`. Inside, you'll find subdirectories corresponding to each video. Each subdirectory houses a certain number of frames extracted from its associated video.
+4. Running `framing.ipynb` or `framing.py` will create a directory named `frame_{number of frames}`. Inside, you'll find subdirectories corresponding to each video. Each subdirectory houses a certain number of frames extracted from its associated video.
 
 ### Step 4: Execute the Benchmark Script
 

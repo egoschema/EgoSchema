@@ -14,6 +14,7 @@ Ensure you have the EgoSchema dataset downloaded and readily available.
 
 Navigate to the `disguise.ipynb` file:
 - Update `EGOSCHEMA_FOLDER` with the path pointing to the EgoSchema folder.
+- Update `VID_FOLDER` with the path pointing to the EgoSchema video folder.
 
 ## Installation and Configuration
 
@@ -104,7 +105,7 @@ This modification allows us to keep track of the q_uid of question when recordin
 
 ### Step 6: Modify `text_prompt.py` File
 
-Navigate to `Cotrain/datasets/modules/text_prompt.py` and find the section around line 10. Replace the existing code block:
+Navigate to `Cotrain/modules/text_prompt.py` and find the section around line 10. Replace the existing code block:
 
 ```python
 def text_prompt(data = K400VideoDataset.classes(), prompt_type='all'):
@@ -120,7 +121,7 @@ This modification just fixes some issues the codebase.
 
 ### Step 7: Modify `cotrain_utils.py` File
 
-Navigate to `Cotrain/datasets/modules/cotrain_utils.py` and find the section around line 46. Comment out the existing code block:
+Navigate to `Cotrain/modules/cotrain_utils.py` and find the section around line 46. Comment out the existing code block:
 
 ```python
 setattr(pl_module, f"{split}_{k}_accuracy", Accuracy())

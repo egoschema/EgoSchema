@@ -17,7 +17,8 @@ import multiprocessing
 from multiprocessing import Queue as multi_queue
 import time
 
-EGOSCHEMA_FOLDER = "../../EgoSchema"
+EGOSCHEMA_FOLDER = "../../../"
+VID_FOLDER = "/shared/raiymbek/good_clips_git"
 
 def parse_args():
     """
@@ -31,6 +32,13 @@ def parse_args():
         dest="frames",
         help="how much frames",
         default=10,
+        type=int,
+    )
+    parser.add_argument(
+        "--p",
+        dest="processes",
+        help="how much processes",
+        default=4,
         type=int,
     )
     return parser.parse_args()
@@ -91,11 +99,12 @@ def progress_task(initially_done, the_queue, to_do):
 if __name__ == "__main__":
     args = parse_args()
     frames = args.frames
+    processes = args.processes
 
-    questions_f = open(f"{EGOSCHEMA_FOLDER}/questions_with_correct.json")
+    questions_f = open(f"{EGOSCHEMA_FOLDER}/questions.json")
     questions = json.load(questions_f)
 
-    vid_dir = f"{EGOSCHEMA_FOLDER}/videos"
+    vid_dir = f"{VID_FOLDER}/videos"
     frames_dir = f"frames_{frames}"
     if not os.path.exists(frames_dir):
         os.mkdir(frames_dir)
@@ -112,7 +121,7 @@ if __name__ == "__main__":
     progress_process = multiprocessing.Process(target=progress_task, args=(initially_done, the_queue, to_do))
     
     procceses = []
-    for i in range(10):
+    for i in range(processes):
         p1 = multiprocessing.Process(target=task, args=(the_queue,))
         procceses.append(p1)
         
